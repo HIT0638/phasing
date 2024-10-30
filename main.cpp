@@ -1,7 +1,7 @@
 #include <getopt.h>
 #include <cassert>
 
-#include "ksnp_reader.h"
+#include "data_reader.h"
 #include "realignment.h"
 #include "group.h"
 
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
     
     // enumerate chrs
     for (int i = 0; i < variant_table.size; i ++) { // 遍历所有染色体	
-        const auto &chr_name = variant_table.chromosome[i];
+        const auto &chr_name = variant_table.chromosomes[i];
 		auto &snp_column = variant_table.variants[i]; // 对应染色体的所有snp
 		fprintf(stderr, "Phase %ld SNPs on chromosome %s\n", snp_column.size(), chr_name.c_str());
 
