@@ -1,0 +1,1 @@
+/usr/bin/c++  -g -O3 CMakeFiles/tphase.dir/src/data_reader.cpp.o CMakeFiles/tphase.dir/src/group.cpp.o CMakeFiles/tphase.dir/src/realignment.cpp.o CMakeFiles/tphase.dir/main.cpp.o -o tphase   -L/home/user/tengbo/bishe/phasing/lib  -Wl,-rpath,/home/user/tengbo/bishe/phasing/lib -lz -lhts

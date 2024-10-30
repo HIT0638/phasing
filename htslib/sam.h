@@ -211,18 +211,18 @@ extern const int8_t bam_cigar_table[256];
  @field  isize   observed template length ("insert size")
  */
 typedef struct bam1_core_t {
-    hts_pos_t pos;
-    int32_t tid;
-    uint16_t bin; // NB: invalid on 64-bit pos
-    uint8_t qual;
-    uint8_t l_extranul;
-    uint16_t flag;
-    uint16_t l_qname;
-    uint32_t n_cigar;
-    int32_t l_qseq;
-    int32_t mtid;
-    hts_pos_t mpos;
-    hts_pos_t isize;
+    hts_pos_t pos;      // 0-based 左端坐标
+    int32_t tid;        // 参考序列ID
+    uint16_t bin;       // bin索引
+    uint8_t qual;       // 比对质量
+    uint8_t l_extranul; // qname后面的额外NULL字符数
+    uint16_t flag;      // 比对标志位
+    uint16_t l_qname;   // 序列名长度
+    uint32_t n_cigar;   // CIGAR操作数
+    int32_t l_qseq;     // 序列长度
+    int32_t mtid;       // 配对读取的参考序列ID 
+    hts_pos_t mpos;     // 配对读取的位置
+    hts_pos_t isize;    // 插入片段大小
 } bam1_core_t;
 
 /*! @typedef
@@ -250,12 +250,13 @@ typedef struct bam1_core_t {
     Ie as per the BAM specification and not the SAM ASCII printable method.
  */
 typedef struct bam1_t {
-    bam1_core_t core;
-    uint64_t id;
-    uint8_t *data;
-    int l_data;
-    uint32_t m_data;
-    uint32_t mempolicy:2, :30 /* Reserved */;
+    bam1_core_t core;    // 核心数据结构,包含基本的比对信息(位置、标志位等)
+    uint64_t id;         // 唯一标识符
+    uint8_t *data;       // 指向可变长度数据的指针(包含序列名、CIGAR、序列等)
+    int l_data;          // data数组的当前长度
+    uint32_t m_data;     // data数组的分配内存大小
+    uint32_t mempolicy:2,// 内存管理策略(2位)
+            :30;         // 保留30位,未使用
 } bam1_t;
 
 /*! @function

@@ -3,6 +3,7 @@
 
 #include "ksnp_reader.h"
 #include "realignment.h"
+#include "group.h"
 
 static int usage() {
 	fprintf(stderr, "Usage: phase -b <BAM> -r <FASTA> -v <VCF> -o <Output>\n");
@@ -47,17 +48,27 @@ int main(int argc, char* argv[]) {
     FASTA_Reader ref_reader(ref_fn);
     
     // enumerate chrs
-    for (int i = 0; i < variant_table.size; i ++) {
+    for (int i = 0; i < variant_table.size; i ++) { // 遍历所有染色体	
         const auto &chr_name = variant_table.chromosome[i];
 		auto &snp_column = variant_table.variants[i]; // 对应染色体的所有snp
 		fprintf(stderr, "Phase %ld SNPs on chromosome %s\n", snp_column.size(), chr_name.c_str());
 
-		// Detecting alleles
-        int length = ref_reader.get_length(chr_name); assert(length > 0);
-        char *sequence = ref_reader.get_contig(chr_name);
+		// Detecting alleles (include Realignment)
+        int length = ref_reader.get_length(chr_name); assert(length > 0); // 获取染色体的长度
+        char *sequence = ref_reader.get_contig(chr_name); // 获取染色体的序列
         std::vector<Read_Allele> read_row;
-        read_row = detect_allele(bam_fn, chr_name, snp_column, length, sequence);
-
+        read_row = detect_allele(bam_fn, chr_name, snp_column, length, sequence); // 检测 allele, 并进行realignment，返回的是所有 read 的 SNP 和 allele
         delete [] sequence;
+
+
+		/**
+		 * 思考一下要不要边分组边建树
+		 * 这样的话，先有分组，再有建树
+		 * 可以将树的根节点信息存储在组中
+		 */
+		// group SNPs by chunkL & chunkV
+		auto groups = group_snps(snp_column);
+
+		// create haplotype tree for each group
     }
 }

@@ -1,0 +1,3 @@
+/home/user/tengbo/bishe/phasing/CMakeFiles/tphase.dir
+/home/user/tengbo/bishe/phasing/CMakeFiles/edit_cache.dir
+/home/user/tengbo/bishe/phasing/CMakeFiles/rebuild_cache.dir
